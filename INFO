@@ -1,0 +1,5 @@
+Pomysł jest taki: grupy umieszczamy w punktach "pierwszego poziomu", czyli potencjalnych rozwiązaniach. 
+Pingwiny oddalają się na pewną odległość randomową ale ograniczoną, szukają tam punktu, jak znajdą liczone wszystko.
+Następnie konfrontowane najlepsze grupowe/w populacji, wymiana informacji, upgrade pozycji, to samo.
+PROBLEMY: bardzo długie działanie- dużo razy przechodzi duże ilości danych
+To nie jest idealnie algorytm z artykułu- kilka rzeczy było bardzo słabo opisanych no i nie wszystko do tego pasowało, ale pomogło
