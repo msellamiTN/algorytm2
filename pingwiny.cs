@@ -14,9 +14,10 @@ namespace algorytm22
         double polozenie2;
         double zdobytepozywienie;
         int liczbanurkowan;
-        public pingwiny()
+        public pingwiny(int nr, int l)
         {
-            lporzadkowa = 0;
+            nrgrupy = nr;
+            lporzadkowa = l;
         }
         public static int getlporzadkowa(pingwiny p)
         {
@@ -68,8 +69,10 @@ namespace algorytm22
             int i = 0;
             int j = 0;
             int nr = 0;
-            int r1 = rnd.Next(-8000, 8000) / 10000;
-            int r2 = rnd.Next(-8000, 8000) / 10000;
+            double r1 = rnd.Next(-8000, 8000);
+            double r2 = rnd.Next(-8000, 8000);
+            r1 = r1 / 10000;
+            r2 = r2 / 10000;
             int odleglosc = 0;
             int odleglosc1 = 0;
             double w1;
@@ -89,7 +92,7 @@ namespace algorytm22
                 wp2 = punkty.getwspz2(pun[liczba1]);
                 odleglosc = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(w1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(w1 * Math.PI / 180) * Math.Cos((w2 - wp2) * Math.PI / 180))) * 6371);
                 punkt = pun[liczba1];
-                if (odleglosc < 20) czy = true;
+                if (odleglosc < 30) czy = true;
                 for (j = liczba1 + 1; j < liczba2; j++)
                 {
                     wp1 = punkty.getwspz1(pun[j]);
@@ -111,13 +114,41 @@ namespace algorytm22
             }
             else
             {
+                
+                przemiescsie(p, pop);
+                w1 = pingwiny.getpol1(p);
+                w2 = pingwiny.getpol2(p);
+                nr = p.nrgrupy;
+                wp1 = punkty.getwspr1(grupy.getpunkt(populacja.getgrupa(pop, 0)));
+                wp2 = punkty.getwspr2(grupy.getpunkt(populacja.getgrupa(pop, 0)));
+                odleglosc = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(w1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(w1 * Math.PI / 180) * Math.Cos((w2 - wp2) * Math.PI / 180))) * 6371);
+                for (i = 1; i < populacja.getlgrup(pop); i++)
+                {
+                    wp1 = punkty.getwspr1(grupy.getpunkt(populacja.getgrupa(pop, i)));
+                    wp2 = punkty.getwspr2(grupy.getpunkt(populacja.getgrupa(pop, i)));
+                    odleglosc1 = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(w1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(w1 * Math.PI / 180) * Math.Cos((w2 - wp2) * Math.PI / 180))) * 6371);
+                    if (odleglosc1 < odleglosc && daty.roznicaczasu(punkty.getdata(punkt), punkty.getdata(grupy.getpunkt(populacja.getgrupa(pop, i)))) > 0)
+                    {
+                        odleglosc = odleglosc1;
+                        nr = i;
+                    }
+                }
+                if (nr != pingwiny.getnrgrupy(p))
+                {
+                    grupy.zabierzpingwina(populacja.getgrupa(pop, p.nrgrupy), p);
+                    grupy.dodajpingwina(populacja.getgrupa(pop, nr), p);
+                    p.nrgrupy = nr;
+                    g = populacja.getgrupa(pop, nr);
+                }
+                pingwiny.setpol1(p, punkty.getwspr1(grupy.getpunkt(g)) + r1);
+                pingwiny.setpol2(p, punkty.getwspr2(grupy.getpunkt(g)) + r2);
                 w1 = pingwiny.getpol1(p);
                 w2 = pingwiny.getpol2(p);
                 wp1 = punkty.getwspz1(pun[liczba1]);
                 wp2 = punkty.getwspz2(pun[liczba1]);
                 odleglosc = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(w1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(w1 * Math.PI / 180) * Math.Cos((w2 - wp2) * Math.PI / 180))) * 6371);
                 punkt = pun[liczba1];
-                if (odleglosc < 20) czy = true;
+                if (odleglosc < 30) czy = true;
                 for (j = liczba1 + 1; j < liczba2; j++)
                 {
                     wp1 = punkty.getwspz1(pun[j]);
@@ -130,48 +161,6 @@ namespace algorytm22
                         czy = true;
                     }
                 }
-                nr = 0;
-                if(czy== true)
-                {
-                    w1 = punkty.getwspr1(grupy.getpunkt(populacja.getgrupa(pop, 0)));
-                    w2 = punkty.getwspr2(grupy.getpunkt(populacja.getgrupa(pop, 0)));
-                    odleglosc = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(w1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(w1 * Math.PI / 180) * Math.Cos((w2 - wp2) * Math.PI / 180))) * 6371);
-                    for (i = 1; i < populacja.getlgrup(pop); i++)
-                    {
-                        w1 = punkty.getwspr1(grupy.getpunkt(populacja.getgrupa(pop, i)));
-                        w2 = punkty.getwspr2(grupy.getpunkt(populacja.getgrupa(pop, i)));
-                        odleglosc1 = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(w1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(w1 * Math.PI / 180) * Math.Cos((w2 - wp2) * Math.PI / 180))) * 6371);
-                        if (odleglosc1 < odleglosc && daty.roznicaczasu(punkty.getdata(punkt), punkty.getdata(grupy.getpunkt(populacja.getgrupa(pop, i)))) > 0)
-                        {
-                            odleglosc = odleglosc1;
-                            nr = i;
-                        }
-                    }
-                }
-                else
-                {
-                    wp1 = punkty.getwspr1(grupy.getpunkt(populacja.getgrupa(pop, 0)));
-                    wp2 = punkty.getwspr2(grupy.getpunkt(populacja.getgrupa(pop, 0)));
-                    odleglosc = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(w1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(w1 * Math.PI / 180) * Math.Cos((w2 - wp2) * Math.PI / 180))) * 6371);
-                    for (i = 1; i < populacja.getlgrup(pop); i++)
-                    {
-                        wp1 = punkty.getwspr1(grupy.getpunkt(populacja.getgrupa(pop, i)));
-                        wp2 = punkty.getwspr2(grupy.getpunkt(populacja.getgrupa(pop, i)));
-                        odleglosc1 = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(w1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(w1 * Math.PI / 180) * Math.Cos((w2 - wp2) * Math.PI / 180))) * 6371);
-                        if (odleglosc1 < odleglosc && daty.roznicaczasu(punkty.getdata(punkt), punkty.getdata(grupy.getpunkt(populacja.getgrupa(pop, i)))) > 0)
-                        {
-                            odleglosc = odleglosc1;
-                            nr = i;
-                        }
-                    }
-                }
-                if (nr != pingwiny.getnrgrupy(p))
-                {
-                    grupy.zabierzpingwina(populacja.getgrupa(pop, p.nrgrupy), p);
-                    grupy.dodajpingwina(populacja.getgrupa(pop, nr), p);
-                    p.nrgrupy = nr;
-                    g = populacja.getgrupa(pop, nr);
-                }
                 if (czy == true)
                 {
                     k = grupy.getpodstawe(g);
@@ -180,13 +169,16 @@ namespace algorytm22
                 else p.zdobytepozywienie = grupy.getpodstawe(g);
             }
         }
+
         public static void przemiescsie(pingwiny p, populacja pop)
         {
+            Random rnd = new Random();
             double pol1=pingwiny.getpol1(populacja.getpgbest(pop));
-            double pol2=pingwiny.getpol2(populacja.getpgbest(pop));
-            Random rnd=new Random();
-            double r1=rnd.Next(0,1000)/10000;
-            double r2=rnd.Next(0,1000)/10000;
+            double pol2 = pingwiny.getpol2(populacja.getpgbest(pop));
+            double r1=rnd.Next(0,1000);
+            double r2=rnd.Next(0,1000);
+            r1 = r1 / 10000;
+            r2 = r2 / 10000;
             if (p.lporzadkowa != pingwiny.getlporzadkowa(populacja.getpgbest(pop)))
             {
                 if(p.polozenie1<=pol1)

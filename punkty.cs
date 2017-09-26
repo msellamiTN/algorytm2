@@ -17,6 +17,7 @@ namespace algorytm22
         double wspr2;
         int dltrasy=0;
         daty data = new daty();
+        int odleglosc = 0;
         public punkty()
         {
             lporzadkowa = 0;
@@ -120,10 +121,10 @@ namespace algorytm22
             double c=0;
             double wynik=0;
             double d=0;
-            if (punkty.getdltrasy(o) < 500) c = 0.8 * punkty.getdltrasy(o);
-            else if (punkty.getdltrasy(o) < 1000) c = punkty.getdltrasy(o);
-            else if (punkty.getdltrasy(o) < 1500) c = 1.2 * punkty.getdltrasy(o);
-            else c = 1.4 * punkty.getdltrasy(o) / 50;
+            if (punkty.getdltrasy(o) < 500) c = 0.8 * punkty.getdltrasy(o)/10;
+            else if (punkty.getdltrasy(o) < 1000) c = punkty.getdltrasy(o)/10;
+            else if (punkty.getdltrasy(o) < 1500) c = 1.2 * punkty.getdltrasy(o)/10;
+            else c = 1.4 * punkty.getdltrasy(o) / 10;
             d = daty.roznicaczasu(punkty.getdata(o), punkty.getdata(grupy.getpunkt(g)));
             if (d > 1) c = c / 1.5;
             d = o.wspolczynnikfra;
@@ -133,7 +134,6 @@ namespace algorytm22
         }
         public static bool czyistpolaczenie(punkty poczatek, int maxodleglosc, int maxczas, int minczas, oferty o)
         {
-            int i = 0;
             int dzien1;
             int dzien2;
             int miesiac1;

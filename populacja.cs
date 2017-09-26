@@ -9,13 +9,13 @@ namespace algorytm22
     class populacja
     {
         int liczbagrup;
-        grupy[] gr=new grupy[10000];
-        pingwiny pgbest=new pingwiny();
+        grupy[] gr=new grupy[700];
+        pingwiny pgbest=new pingwiny(0,50000);
 
         public populacja()
         {
             liczbagrup = 0;
-            for (int j = 0; j < 10000; j++)
+            for (int j = 0; j < 700; j++)
             {
                 this.gr[j] = new grupy(j);
             }
@@ -44,8 +44,12 @@ namespace algorytm22
         public static void wymianamiedzygrupami(populacja p)
         {
             int i = 0;
+            for (i = 0; i < p.liczbagrup; i++)
+            {
+                grupy.wymianainformacji(p.gr[i]);
+            }
             double best = pingwiny.getpozywienie(grupy.getbest(p.gr[0]));
-            pingwiny pin = new pingwiny();
+            pingwiny pin = new pingwiny(0,50000);
             pin=grupy.getbest(p.gr[0]);
             for (i = 1; i < p.liczbagrup; i++)
             {

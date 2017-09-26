@@ -12,17 +12,19 @@ namespace algorytm22
         int lpingwinow;
         double podstawapunktu; //dla każdego pingwina z grupy mamy taką samą wartość "początkową" wynikającą z łowiska grupy
         punkty punkt=new punkty();
-        pingwiny[] pingwin=new pingwiny[10000];
-        pingwiny pbest = new pingwiny();
+        pingwiny[] pingwin=new pingwiny[4000];
+        pingwiny pbest = new pingwiny(0, 50000);
 
         public grupy(int i)
         {
             int j = 0;
-            for(j=0;j<10000;j++)
-            {
-                this.pingwin[j]=new pingwiny();
-            }
             nrgrupy = i;
+            for(j=0;j<4000;j++)
+            {
+                if(j<20) this.pingwin[j]=new pingwiny(i, (i)*20+j);
+                else this.pingwin[j] = new pingwiny(i, 50000);
+
+            }
             lpingwinow = 20; //zakłądamy początkową liczbę pingwinów
         }
         public static void setlpingwinow(grupy g, int i)
@@ -84,7 +86,7 @@ namespace algorytm22
         {
             int i=0;
             double best;
-            pingwiny p = new pingwiny();
+            pingwiny p = new pingwiny(0, 50000);
             best=pingwiny.getpozywienie(g.pingwin[0]);
             p=g.pingwin[0];
             for (i = 1; i < g.lpingwinow; i++)
@@ -129,7 +131,7 @@ namespace algorytm22
                 }
                 j++;
             }
-            for(j=populacja.getlgrup(pop);j<=populacja.getlgrup(pop)-1;j++)
+            for(j=populacja.getlgrup(pop)-1;j>=populacja.getlgrup(pop)-5;j--)
             {
                 System.Console.WriteLine(populacja.getlgrup(pop)-j +" miejsce z prawdopodobienstwem "+ grupy.getlpingwinow(g[j]) + "/"+populacja.getlgrup(pop)*30);
                 System.Console.WriteLine("współrzędne załadunku: "+punkty.getwspz1(grupy.getpunkt(g[j]))+";"+punkty.getwspz2(grupy.getpunkt(g[j])));

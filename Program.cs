@@ -25,7 +25,7 @@ namespace algorytm22
             oferty[] ofer = new oferty[40000];
             frachty[] fra = new frachty[9000];
             populacja pop = new populacja();
-            grupy[] gr=new grupy[1000]; //potem inicjować
+            grupy[] gr=new grupy[700]; //potem inicjować
             punkty[] pun = new punkty[30000];
             punkty ppocz = new punkty();
             //wczytanie ofert i frachtów- skopiować
@@ -123,12 +123,17 @@ namespace algorytm22
             for (i = 0; i < populacja.getlgrup(pop); i++)
             {
                 grupy.zacznijpolowanie(gr[i], ppocz, lpunktow1w, lpunktow2w, pun, lfrachtow, fra, 1, pop);
+                populacja.wymianamiedzygrupami(pop);
             }
-            for (j = 1; j < 10000; j++)
+            for (j = 1; j < 100; j++)
             {
+                System.Console.WriteLine(j);
+                //System.Console.ReadKey();
                 for (i = 0; i < populacja.getlgrup(pop); i++)
                 {
+                    System.Console.WriteLine(i);
                     grupy.zacznijpolowanie(gr[i], ppocz, lpunktow1w, lpunktow2w, pun, lfrachtow, fra, 2, pop);
+                    populacja.wymianamiedzygrupami(pop);
                 }
             }
             grupy.najliczniejsze(pop, gr);
