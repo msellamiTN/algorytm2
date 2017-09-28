@@ -101,6 +101,7 @@ namespace algorytm22
             System.Console.WriteLine(k);
             for (i = 1; i <= k; i++)
             {
+                l=0;
                 for (j = 1; j <= lofert; j++)
                 {
                     if (oferty.getczyaktywna(ofer[j - 1]) == true)
@@ -112,26 +113,26 @@ namespace algorytm22
                             {
                                 lpunktow++;
                                 pun[lpunktow] = punkty.ofertanapunkt(ofer[j - 1], lpunktow,fra,lfrachtow);
+                                
                                 oferty.setczyistnieje(ofer[j - 1], lpunktow);
+                                l++;
                             }
                         }
                     }
 
                 }
+                punkty.setlsasiadow(pun[i], l) ;
             }
             int lpunktow2w = lpunktow - lpunktow1w;
             for (i = 0; i < populacja.getlgrup(pop); i++)
             {
                 grupy.zacznijpolowanie(gr[i], ppocz, lpunktow1w, lpunktow2w, pun, lfrachtow, fra, 1, pop);
-                populacja.wymianamiedzygrupami(pop);
             }
-            for (j = 1; j < 100; j++)
+            populacja.wymianamiedzygrupami(pop);
+            for (j = 1; j < 50; j++)
             {
-                System.Console.WriteLine(j);
-                //System.Console.ReadKey();
                 for (i = 0; i < populacja.getlgrup(pop); i++)
                 {
-                    System.Console.WriteLine(i);
                     grupy.zacznijpolowanie(gr[i], ppocz, lpunktow1w, lpunktow2w, pun, lfrachtow, fra, 2, pop);
                     populacja.wymianamiedzygrupami(pop);
                 }

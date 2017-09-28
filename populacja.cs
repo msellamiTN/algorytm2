@@ -11,6 +11,7 @@ namespace algorytm22
         int liczbagrup;
         grupy[] gr=new grupy[700];
         pingwiny pgbest=new pingwiny(0,50000);
+        double srednia;
 
         public populacja()
         {
@@ -19,6 +20,7 @@ namespace algorytm22
             {
                 this.gr[j] = new grupy(j);
             }
+            srednia = 0;
         }
         public static void setgrupa(populacja p, grupy g)
         {
@@ -41,6 +43,10 @@ namespace algorytm22
         {
             return p.liczbagrup;
         }
+        public static double getsrednia(populacja p)
+        {
+            return p.srednia;
+        }
         public static void wymianamiedzygrupami(populacja p)
         {
             int i = 0;
@@ -58,7 +64,9 @@ namespace algorytm22
                     best = pingwiny.getpozywienie(grupy.getbest(p.gr[i]));
                     pin = grupy.getbest(p.gr[i]);
                 }
+                p.srednia = p.srednia + pingwiny.getpozywienie(pin);
             }
+            p.srednia = p.srednia / p.liczbagrup;
             p.pgbest = pin;
         }
     }

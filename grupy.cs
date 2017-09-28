@@ -21,11 +21,15 @@ namespace algorytm22
             nrgrupy = i;
             for(j=0;j<4000;j++)
             {
-                if(j<20) this.pingwin[j]=new pingwiny(i, (i)*20+j);
+                if(j<30) this.pingwin[j]=new pingwiny(i, (i)*30+j);
                 else this.pingwin[j] = new pingwiny(i, 50000);
 
             }
             lpingwinow = 20; //zakłądamy początkową liczbę pingwinów
+        }
+        public static int getnrgrupy(grupy g)
+        {
+            return g.nrgrupy;
         }
         public static void setlpingwinow(grupy g, int i)
         {
@@ -39,15 +43,6 @@ namespace algorytm22
         {
             return g.pbest;
         }
-        public static void obliczpodstawe(grupy g, punkty ppocz, frachty[] f, int lfrachtow)
-        {
-            double wp1 = punkty.getwspz1(ppocz);
-            double wp2 = punkty.getwspz2(ppocz);
-            double wg1 = punkty.getwspz1(g.punkt);
-            double wg2 = punkty.getwspz2(g.punkt);
-            int odleglosc = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(wg1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(wg1 * Math.PI / 180) * Math.Cos((wg2 - wp2) * Math.PI / 180))) * 6371);
-            g.podstawapunktu = 150 - odleglosc - daty.roznicaczasu(punkty.getdata(g.punkt), punkty.getdata(ppocz))+frachty.porownujfrachty(f,g.punkt,lfrachtow);
-        }
         public static void setpunkt(grupy g, punkty p)
         {
             g.punkt = p;
@@ -55,6 +50,20 @@ namespace algorytm22
         public static punkty getpunkt(grupy g)
         {
             return g.punkt;
+        }
+        public static void obliczpodstawe(grupy g, punkty ppocz, frachty[] f, int lfrachtow)
+        {
+            double wp1 = punkty.getwspz1(ppocz);
+            double wp2 = punkty.getwspz2(ppocz);
+            double wg1 = punkty.getwspz1(g.punkt);
+            double wg2 = punkty.getwspz2(g.punkt);
+            double wgr1 = punkty.getwspr1(g.punkt);
+            double wgr2 = punkty.getwspr2(g.punkt);
+
+            int odleglosc = (int)(Math.Acos((Math.Sin(wp1 * Math.PI / 180) * Math.Sin(wg1 * Math.PI / 180) + Math.Cos(wp1 * Math.PI / 180) * Math.Cos(wg1 * Math.PI / 180) * Math.Cos((wg2 - wp2) * Math.PI / 180))) * 6371);
+            int dl = (int)(Math.Acos((Math.Sin(wg1 * Math.PI / 180) * Math.Sin(wgr1 * Math.PI / 180) + Math.Cos(wg1 * Math.PI / 180) * Math.Cos(wgr1 * Math.PI / 180) * Math.Cos((wg2 - wgr2) * Math.PI / 180))) * 6371);
+
+            g.podstawapunktu = 200 - odleglosc + 0.4 * dl - daty.roznicaczasu(punkty.getdata(ppocz), punkty.getdata(g.punkt)) + frachty.porownujfrachty(f, g.punkt, lfrachtow) + punkty.getlsasiadow(g.punkt);
         }
         public static void dodajpingwina(grupy g, pingwiny p)
         {
@@ -84,19 +93,20 @@ namespace algorytm22
         }
         public static void wymianainformacji(grupy g)
         {
-            int i=0;
+            int j=0;
             double best;
             pingwiny p = new pingwiny(0, 50000);
-            best=pingwiny.getpozywienie(g.pingwin[0]);
-            p=g.pingwin[0];
-            for (i = 1; i < g.lpingwinow; i++)
-            {
-                if (pingwiny.getpozywienie(g.pingwin[i]) > best)
+            p = g.pingwin[j];
+            best = pingwiny.getpozywienie(g.pingwin[j]);
+                for (j = 0; j < g.lpingwinow; j++)
                 {
-                    best = pingwiny.getpozywienie(g.pingwin[i]);
-                    p = g.pingwin[i];
+                    if (pingwiny.getpozywienie(g.pingwin[j]) > best)
+                    {
+                        best = pingwiny.getpozywienie(g.pingwin[j]);
+                        p = g.pingwin[j];
+                    }
                 }
-            }
+                   
             g.pbest = p;
         }
         public static double getpodstawe(grupy g)
@@ -112,6 +122,8 @@ namespace algorytm22
             {
                 pingwiny.nurkuj(g.pingwin[i], liczba1, liczba2, g,p,lfrachtow,f,nr,pop);
             }
+            grupy.wymianainformacji(g);
+
         }
         public static void najliczniejsze(populacja pop, grupy[] g)
         {
@@ -133,7 +145,7 @@ namespace algorytm22
             }
             for(j=populacja.getlgrup(pop)-1;j>=populacja.getlgrup(pop)-5;j--)
             {
-                System.Console.WriteLine(populacja.getlgrup(pop)-j +" miejsce z prawdopodobienstwem "+ grupy.getlpingwinow(g[j]) + "/"+populacja.getlgrup(pop)*30);
+                System.Console.WriteLine(populacja.getlgrup(pop)-j +" miejsce z prawdopodobienstwem "+ grupy.getlpingwinow(g[j]) + "/"+populacja.getlgrup(pop)*30 +" "+ grupy.getnrgrupy(g[j]));
                 System.Console.WriteLine("współrzędne załadunku: "+punkty.getwspz1(grupy.getpunkt(g[j]))+";"+punkty.getwspz2(grupy.getpunkt(g[j])));
                 System.Console.WriteLine("współrzędne rozładunku: " + punkty.getwspr1(grupy.getpunkt(g[j])) + ";" + punkty.getwspr2(grupy.getpunkt(g[j])));
                 System.Console.WriteLine("data załadunku: " + daty.getdzien(punkty.getdata(grupy.getpunkt(g[j]))) + "/" + daty.getmiesiac(punkty.getdata(grupy.getpunkt(g[j]))) + "/" +daty.getrok(punkty.getdata(grupy.getpunkt(g[j]))));
